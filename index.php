@@ -7,6 +7,8 @@
 </head>
 
 <body>
+<script src="js/jquery-1.7.2.js"></script>
+<script src="js/functions.js"></script>
 	<div class="container-fluid">
 		<div class="navbar">
   			<div class="navbar-inner">
@@ -45,14 +47,17 @@
   					</li>
 				</ul>
     		</div>
-    		<div class="span10">
+    		<div class="span4">
       			<!--Body content-->
-      			<form class="well">
+      			<form class="well" id="movieform" action="">
   					<label>Movie Name</label>
-  					<input type="text" class="span3">
+  					<input type="text" class="span10" id="moviename">
   					<span class="help-block">Type the name of the movie.</span>
-  					<button type="submit" class="btn">Submit</button>
+  					<button type="button" class="btn" id="moviename-submit">Submit</button>
 				</form>
+    		</div>
+    		<div class="span6">
+    			<div id="newdiv"></div>
     		</div>
   		</div>
 	</div>

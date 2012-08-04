@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Cp1252">
+<title>QuikFlic</title>
+<link rel="stylesheet" href="/quikflic/css/bootstrap.css">
+<script type="text/javascript" src="http://platform.linkedin.com/in.js">
+  api_key: y0d03exc7j1j
+  authentication: true
+</script>
+<script type="text/javascript">
+ 
+function loadData() {
+  IN.API.Connections("me")
+    .fields(["pictureUrl","publicProfileUrl"])
+    .params({"count":30})
+    .result(function(result) {
+      profHTML = "";
+      for (var index in result.values) {
+          profile = result.values[index]
+          if (profile.pictureUrl) {
+              profHTML += "<a href=\"" + profile.publicProfileUrl + "\" class=\"btn btn-small\">";
+              profHTML += "<img class=img_border height=30 align=\"left\" src=\"" + profile.pictureUrl + "\"></a>&nbsp;";   
+          }    
+      }
+      $("#connections").html(profHTML);
+    });
+}
+ 
+ 
+</script>
+</head>
+
+<body>
+<script src="js/jquery-1.7.2.js"></script>
+	<div class="container-fluid">
+		<div class="navbar">
+  			<div class="navbar-inner">
+    			<div class="container">
+    				<a class="brand" href="#">
+  						QuikFlic LinkedIn Demo
+					</a>
+    			</div>
+  			</div>
+		</div>
+  		<div class="row-fluid">
+  		
+    		<div class="span2">
+      			<!--Sidebar content-->
+      			<ul class="nav nav-list">
+      				<li class="nav-header">
+      					General
+      				</li>
+  					<li>
+    					<a href="#">
+      					<i class="icon-home"></i>
+     	 					Home
+    					</a>
+  					</li>
+  					<li>
+    					<a href="#">
+      					<i class="icon-file"></i>
+     	 					Files
+    					</a>
+  					</li>
+  					<li>
+    					<a href="#">
+      					<i class="icon-envelope"></i>
+     	 					Mails(0)
+    					</a>
+  					</li>
+				</ul>
+    		</div>
+    		<div class="span4">
+      			<!--Body content-->
+      			<div class="well">
+      			<span class="label label-inverse">
+<!--       				<a class="btn btn-large"> -->
+					<script type="in/Login"  data-onAuth="loadData">
+						<b/>Hello, <?js= firstName ?> <?js= lastName ?>.
+					</script>
+<!-- 					</a> -->
+				</span>
+				</div>
+			</div>
+    		<div class="span6 well">
+    			<div id="connections"></div>
+    		</div>
+  		</div>
+	</div>
+</body>
+</html>

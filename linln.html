@@ -9,8 +9,55 @@
   authentication: true
 </script>
 <script type="text/javascript">
+function loadData(){
+	loadConnections();
+	loadProfile();
+	loadActivity();
+}
+
+function loadActivity() {
+		IN.API.NetworkUpdates()
+		.params({type:"SHAR","count":"20"})
+		.result(function(result) {
+    	var streamHTML = "";
+    	for (var update in result.values) {
+        var thisupdate = result.values[update]
+     
+        // Build each individual stream update item
+        person = thisupdate.updateContent.person;
+        var thisHTML = "";
+        if(person.firstName!="Sanjay")
+        {
+        	
+        // Person's picture,  linked name, and status
+        thisHTML += "<div class=\"well streamitem\"><div class=\"updateperson\">" ;
+        thisHTML += "<img class=img_border align=\"left\" height=\"50\" src=\"" + person.pictureUrl + "\">";
+        thisHTML += "<a><span class=\"updater\"><h3>" + person.firstName + " " + person.lastName + "</h3></span></a>";  
+        thisHTML += "<p class=\"update\">" + person.currentShare.comment + "</p></div></div>";
  
-function loadData() {
+        // Slap this onto the HTML we're building
+        streamHTML += thisHTML;
+        }
+    }
+    $("#stream").html(streamHTML);
+});
+} 
+
+function loadProfile() {
+	IN.API.Profile("me")
+  .fields(["id", "firstName", "lastName", "pictureUrl","headline","network","numConnections","summary"])
+  .result(function(result) {
+    profile = result.values[0];
+    profHTML = "";
+    profHTML += "<p><a class=\"btn\"><img class=img_border align=\"left\" src=\"" + profile.pictureUrl + "\"></a></p>";  
+    profHTML += "<h2 class=myname>" + profile.firstName + " " + profile.lastName + "</a> </h2>";
+    profHTML += "<span class=\"label label-info\">" + profile.headline + "</span><br /><br />";
+    profHTML += "<a class=\"btn\"><h1>" + profile.numConnections + "</h1></a>&nbsp; Connections<br /><br />";
+    profHTML += "<blockquote>" + profile.summary + "</blockquote><br />";
+    $("#profile").html(profHTML);
+  });
+}
+function loadConnections() {
   IN.API.Connections("me")
     .fields(["pictureUrl","publicProfileUrl"])
     .params({"count":30})
@@ -40,6 +87,11 @@ function loadData() {
     				<a class="brand" href="#">
   						QuikFlic LinkedIn Demo
 					</a>
+					<div class="pull-right">
+						<script type="in/Login"  data-onAuth="loadData">
+							<b/>Hello, <?js= firstName ?> <?js= lastName ?>.
+						</script>
+					</div>
     			</div>
   			</div>
 		</div>
@@ -49,7 +101,7 @@ function loadData() {
       			<!--Sidebar content-->
       			<ul class="nav nav-list">
       				<li class="nav-header">
-      					General
+      						General
       				</li>
   					<li>
     					<a href="#">
@@ -74,17 +126,12 @@ function loadData() {
     		<div class="span4">
       			<!--Body content-->
       			<div class="well">
-      			<span class="label label-inverse">
-<!--       				<a class="btn btn-large"> -->
-					<script type="in/Login"  data-onAuth="loadData">
-						<b/>Hello, <?js= firstName ?> <?js= lastName ?>.
-					</script>
-<!-- 					</a> -->
-				</span>
+					<div id="profile"></div>
 				</div>
 			</div>
-    		<div class="span6 well">
-    			<div id="connections"></div>
+    		<div class="span6">
+    			<div class="well" id="connections"></div>
+    			<div class="well" id="stream"></div>
     		</div>
   		</div>
 	</div>
